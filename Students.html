@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Management System</title>
+</head>
+<body>
+
+    <h1>Students Management System</h1>
+
+    <script>
+        class Student {
+            constructor(id, name, grades, attendance) {
+                this.id = id;
+                this.name = name;
+                this.grades = grades;
+                this.attendance = attendance;
+            }
+            
+            calculateAverage() {
+                const total = this.grades.reduce((sum, grade) => sum + grade, 0);
+                return total / this.grades.length;
+            }
+
+            getGrade(average) {
+                if (average >= 90) {
+                    return "A";
+                } else if (average >= 80) {
+                    return "B";
+                } else if (average >= 70) {
+                    return "C";
+                } else if (average >= 60) {
+                    return "D";
+                } else if (average >= 50) {
+                    return "E";
+                } else {
+                    return "F";
+                }
+            }
+            
+            getResult(average) {
+                if (average >= 50 && this.attendance >= 75) {
+                    return "ناجح";
+                } else {
+                    return "يحتاج مراجعة";
+                }
+            }
+        }
+
+        const studentsList = [
+            new Student(1, "Ahmed", [90, 85, 95], 90),
+            new Student(2, "Sara", [45, 48, 42], 80),
+            new Student(3, "Omar", [70, 75, 65], 85),
+            new Student(4, "Mona", [40, 45, 42], 70)
+        ];
+
+
+        console.log("===== Students Report =====");
+
+        studentsList.forEach(student => {
+            const average = student.calculateAverage();
+
+            console.log("Student Name:", student.name);
+            console.log("Average:", average);
+            console.log("Grade:", student.getGrade(average));
+            console.log("Result:", student.getResult(average));
+            console.log("--------------------------");
+        });
+
+        const weakStudents = studentsList.filter(student => {
+            const average = student.calculateAverage();
+            return average >= 40 && average <= 49;
+        });
+
+        const mercyStudents = weakStudents.map(student => {
+            return {
+                id: student.id,
+                name: student.name,
+                oldAverage: student.calculateAverage(),
+                newAverage: student.calculateAverage() + 5
+            };
+        });
+
+        const totalMercy = mercyStudents.reduce((sum, student) => {
+            return sum + student.newAverage;
+        }, 0);
+
+        let mercyAverage = 0;
+
+        if (mercyStudents.length > 0) {
+            mercyAverage = totalMercy / mercyStudents.length;
+        }
+
+        console.log("===== Mercy Committee =====");
+
+        console.log("Weak Students:", mercyStudents);
+
+        console.log("Total New Averages:", totalMercy);
+
+        console.log("Mercy Average:", mercyAverage);
+
+    </script>
+
+</body>
+</html>
